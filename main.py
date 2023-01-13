@@ -71,5 +71,52 @@ class TunedModel(BaseModel):
         orm_mode = True
 
 
+class ShowUser(TunedModel):
+    user_id: uuid.UUID
+    name: str
+    surname: str
+    email: EmailStr
+    is_active: bool
+
+
+class UserCreate(BaseModel):
+    name: str
+    surname: str
+    email: EmailStr
+
+    @validator("name")
+    def validate_name(cls, value):
+        if not LETTER_MATCH_PATTERN.match(value):
+            raise HTTPException(status_code=422, detail='Name should contains only letters!')
+        return value
+
+    @validator("surname")
+    def validate_surname(cls, value):
+        if not LETTER_MATCH_PATTERN.match(value):
+            raise HTTPException(status_code=422, detail='Surname should contains only letters!')
+        return value
+
+
+#################################################
+# BLOCK WITH API ROUTES                         #
+#################################################
+# create instance of the app
+app = FastAPI(title='luchanos-oxford-university')
+user_router = APIRouter()
+
+
+async def _create_new_user(body: UserCreate) -> ShowUser:
+    async with async_session() as session:
+        async with session.begin():
+            user_dal = UserDAL(session)
+            user = await user_dal.create_user(name=body.name, surname=body.surname, email=body.email)
+
+            return ShowUser(user_id=user.user_id,
+                            name=user.name,
+                            surname=user.surname,
+                            email=user.email,
+                            is_active=user.is_active)
+
+
 if __name__ == '__main__':
     pass
