@@ -118,5 +118,18 @@ async def _create_new_user(body: UserCreate) -> ShowUser:
                             is_active=user.is_active)
 
 
+@user_router.post("/", response_model=ShowUser)
+def create_user(body: UserCreate) -> ShowUser:
+    return await _create_new_user(body)
+
+
+# create the instance of the routes
+main_api_router = APIRouter()
+
+# set routes to the app instance
+main_api_router.include_router(user_router, prefix='/user', tags=["user"])
+app.include_router(main_api_router)
+
 if __name__ == '__main__':
+    # run uvicorn server on host & port
     pass
