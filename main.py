@@ -33,7 +33,7 @@ Base = declarative_base()
 
 class User(Base):
     __tablename__ = 'users'
-    user_id = Column(UUID(as_uuid=True), primary_key=True, defalt=uuid.uuid4)
+    user_id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     name = Column(String, nullable=False)
     surname = Column(String, nullable=False)
     email = Column(String, nullable=False, unique=True)
@@ -119,7 +119,7 @@ async def _create_new_user(body: UserCreate) -> ShowUser:
 
 
 @user_router.post("/", response_model=ShowUser)
-def create_user(body: UserCreate) -> ShowUser:
+async def create_user(body: UserCreate) -> ShowUser:
     return await _create_new_user(body)
 
 
@@ -132,4 +132,4 @@ app.include_router(main_api_router)
 
 if __name__ == '__main__':
     # run uvicorn server on host & port
-    pass
+    uvicorn.run(app, host="0.0.0.0", port=8000)
