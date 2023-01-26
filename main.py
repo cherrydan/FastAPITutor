@@ -5,8 +5,11 @@
 import uvicorn
 from fastapi import FastAPI, APIRouter
 
+from api.handlers import user_router
+from db.models import Base
+from db.session import engine
+
 app = FastAPI(title='luchanos-oxford-university')
-user_router = APIRouter()
 
 # create the instance of the routes
 main_api_router = APIRouter()
