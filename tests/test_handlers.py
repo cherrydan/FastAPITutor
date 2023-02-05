@@ -16,6 +16,7 @@ async def test_create_user(client, get_user_from_database):
     assert data_from_resp["name"] == user_data["name"]
     assert data_from_resp["surname"] == user_data["surname"]
     assert data_from_resp["email"] == user_data["email"]
+    assert data_from_resp["is_active"] is True
     users_from_db = await get_user_from_database(data_from_resp["user_id"])
     assert len(users_from_db) == 1
     user_from_db = dict(users_from_db[0])
