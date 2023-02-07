@@ -39,3 +39,7 @@ class UserCreate(BaseModel):
         if not LETTER_MATCH_PATTERN.match(value):
             raise HTTPException(status_code=422, detail='Surname should contains only letters!')
         return value
+
+
+class DeleteUserResponse(BaseModel):
+    deleted_user_id = uuid.UUID

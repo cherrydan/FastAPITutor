@@ -1,9 +1,6 @@
 import json
 
-import pytest
 
-
-@pytest.mark.asyncio
 async def test_create_user(client, get_user_from_database):
     user_data = {
         "name": "Nikolay",
@@ -23,5 +20,5 @@ async def test_create_user(client, get_user_from_database):
     assert user_from_db["name"] == user_data["name"]
     assert user_from_db["surname"] == user_data["surname"]
     assert user_from_db["email"] == user_data["email"]
-    assert user_from_db["is_active"] == True
+    assert user_from_db["is_active"] is True
     assert str(user_from_db["user_id"]) == data_from_resp["user_id"]
